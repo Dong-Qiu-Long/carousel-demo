@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>轮播图Demo</title>
+  <title>无缝轮播图Demo</title>
   <style>
     * {
       margin: 0;
@@ -64,6 +64,10 @@
       background: linear-gradient(45deg, #74b9ff, #0984e3);
     }
     
+    .carousel-slide:nth-child(6) {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+    }
+    
     .slide-content {
       text-align: center;
       color: white;
@@ -94,6 +98,7 @@
       color: white;
       transition: all 0.3s ease;
       backdrop-filter: blur(5px);
+      z-index: 10;
     }
     
     .carousel-btn:hover {
@@ -135,18 +140,6 @@
     .dot:hover {
       background: rgba(255, 255, 255, 0.8);
     }
-    
-    .slide-number {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.3);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      backdrop-filter: blur(5px);
-    }
   </style>
 </head>
 <body>
@@ -157,35 +150,30 @@
           <h2>🌈 第一张</h2>
           <p>欢迎来到轮播图世界</p>
         </div>
-        <span class="slide-number">1 / 5</span>
       </div>
       <div class="carousel-slide">
         <div class="slide-content">
           <h2>🌊 第二张</h2>
           <p>流畅的切换动画</p>
         </div>
-        <span class="slide-number">2 / 5</span>
       </div>
       <div class="carousel-slide">
         <div class="slide-content">
           <h2>🌟 第三张</h2>
           <p>支持键盘左右键</p>
         </div>
-        <span class="slide-number">3 / 5</span>
       </div>
       <div class="carousel-slide">
         <div class="slide-content">
           <h2>🍭 第四张</h2>
           <p>底部圆点导航</p>
         </div>
-        <span class="slide-number">4 / 5</span>
       </div>
       <div class="carousel-slide">
         <div class="slide-content">
           <h2>🎉 第五张</h2>
-          <p>循环播放无限尽</p>
+          <p>无缝循环超丝滑</p>
         </div>
-        <span class="slide-number">5 / 5</span>
       </div>
     </div>
     
@@ -209,9 +197,16 @@
     const nextBtn = document.querySelector('.next-btn');
     
     let currentIndex = 0;
-    const totalSlides = slides.length;
+    const totalSlides = 5;
+    let isTransitioning = false;
     
-    function updateCarousel(index) {
+    function updateCarousel(index, withTransition = true) {
+      if (!withTransition) {
+        track.style.transition = 'none';
+      } else {
+        track.style.transition = 'transform 0.5s ease-in-out';
+      }
+      
       track.style.transform = `translateX(-${index * 100}%)`;
       
       dots.forEach((dot, i) => {
@@ -220,13 +215,38 @@
     }
     
     function nextSlide() {
-      currentIndex = (currentIndex + 1) % totalSlides;
+      if (isTransitioning) return;
+      isTransitioning = true;
+      
+      currentIndex++;
       updateCarousel(currentIndex);
+      
+      // 当无缝滚动到最后一张（第一张的克隆）时
+      track.addEventListener('transitionend', function handler() {
+        if (currentIndex >= totalSlides) {
+          currentIndex = 0;
+          updateCarousel(currentIndex, false);
+        }
+        isTransitioning = false;
+        track.removeEventListener('transitionend', handler);
+      });
     }
     
     function prevSlide() {
-      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      if (isTransitioning) return;
+      isTransitioning = true;
+      
+      currentIndex--;
       updateCarousel(currentIndex);
+      
+      track.addEventListener('transitionend', function handler() {
+        if (currentIndex < 0) {
+          currentIndex = totalSlides - 1;
+          updateCarousel(currentIndex, false);
+        }
+        isTransitioning = false;
+        track.removeEventListener('transitionend', handler);
+      });
     }
     
     nextBtn.addEventListener('click', nextSlide);
@@ -234,6 +254,7 @@
     
     dots.forEach((dot, index) => {
       dot.addEventListener('click', () => {
+        if (isTransitioning) return;
         currentIndex = index;
         updateCarousel(currentIndex);
       });
