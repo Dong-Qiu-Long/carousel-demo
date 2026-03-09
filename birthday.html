@@ -237,6 +237,41 @@
     .music-btn:hover { transform: scale(1.1); }
     .music-btn.playing { animation: spin 2s linear infinite; }
     
+    .start-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      cursor: pointer;
+    }
+    
+    .start-overlay.hidden { display: none; }
+    
+    .start-overlay h2 {
+      color: #fff;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(255,107,107,0.8);
+    }
+    
+    .start-overlay .tap-hint {
+      color: #fff;
+      font-size: 1.3rem;
+      animation: bounce 1s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -281,6 +316,10 @@
   </style>
 </head>
 <body>
+  <div class="start-overlay" id="startOverlay">
+    <h2>🎂 生日快乐 🎂</h2>
+    <p class="tap-hint">👆 点击屏幕开始 🎵</p>
+  </div>
   <div class="balloons" id="balloons"></div>
   <div class="confetti" id="confetti"></div>
   
@@ -340,6 +379,7 @@
     
     // 音乐控制 - 使用 Web Audio API 生成生日快乐歌
     const musicBtn = document.getElementById('musicBtn');
+    const startOverlay = document.getElementById('startOverlay');
     let isPlaying = false;
     let audioContext = null;
     let oscillator = null;
@@ -425,12 +465,10 @@
       }
     });
     
-    // 页面加载后自动播放音乐
-    window.addEventListener('load', () => {
-      // 延迟一点播放，让用户准备好
-      setTimeout(() => {
-        startMusic();
-      }, 500);
+    // 用户点击后开始播放音乐并隐藏遮罩
+    startOverlay.addEventListener('click', () => {
+      startOverlay.classList.add('hidden');
+      startMusic();
     });
   </script>
 </body>
