@@ -468,31 +468,7 @@
         startMusic();
       }
     }
-      musicBtn.classList.remove('playing');
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-    }
     
-    // 切换播放/暂停
-    function toggleMusic() {
-      if (isPlaying) {
-        stopMusic();
-      } else {
-        startMusic();
-      }
-    }
-    
-    musicBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        stopMusic();
-      } else {
-        startMusic();
-      }
-    });
-    
-    // 切换按钮事件
     musicBtn.addEventListener('click', toggleMusic);
     
     // 用户点击后开始播放音乐并隐藏遮罩
