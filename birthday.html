@@ -377,76 +377,97 @@
       confettiContainer.appendChild(piece);
     }
     
-    // 音乐控制 - 使用外部音频
+    // 音乐控制 - 使用 Web Audio API
     const musicBtn = document.getElementById('musicBtn');
     const startOverlay = document.getElementById('startOverlay');
     let isPlaying = false;
-    let audio = null;
+    let audioCtx = null;
+    let melodyInterval = null;
     
-    // 生日快乐歌音频链接 (使用可靠的CDN)
-    const birthdaySongUrl = 'https://cdn.pixabay.com/audio/2022/12/15/audio_6d4d4a1f1c.mp3';
+    // 生日快乐歌旋律 (音符频率 Hz)
+    const melody = [
+      { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
+      { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 1.0 },
+      { freq: 659.25, duration: 1.0 }, { freq: 587.33, duration: 2.0 },
+      { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
+      { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 1.0 },
+      { freq: 783.99, duration: 1.0 }, { freq: 659.25, duration: 2.0 },
+      { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
+      { freq: 1046.50, duration: 1.0 }, { freq: 783.99, duration: 1.0 },
+      { freq: 659.25, duration: 1.0 }, { freq: 587.33, duration: 1.0 },
+      { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
+      { freq: 659.25, duration: 1.0 }, { freq: 659.25, duration: 1.0 },
+      { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 2.0 },
+    ];
     
-    function startMusic() {
-      if (!audio) {
-        audio = new Audio(birthdaySongUrl);
-        audio.loop = true;
-        audio.volume = 0.7;
-      }
+    let noteIndex = 0;
+    let nextNoteTime = 0;
+    let schedulerTimer = null;
+    
+    function scheduleNote() {
+      if (!isPlaying || !audioCtx) return;
       
-      audio.play().then(() => {
-        isPlaying = true;
-        musicBtn.classList.add('playing');
-      }).catch(err => {
-        console.log('播放失败:', err);
-        // 如果外部链接失败，尝试使用Web Audio API作为后备
-        playWithWebAudio();
-      });
+      const note = melody[noteIndex];
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.frequency.value = note.freq;
+      osc.type = 'sine';
+      
+      const now = audioCtx.currentTime;
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + note.duration * 0.95);
+      
+      osc.start(now);
+      osc.stop(now + note.duration);
+      
+      noteIndex = (noteIndex + 1) % melody.length;
+      
+      // 根据下一个音符的 duration 来调度
+      const nextDuration = melody[noteIndex].duration * 1000;
+      schedulerTimer = setTimeout(scheduleNote, nextDuration);
     }
     
-    function playWithWebAudio() {
-      // 后备方案：使用Web Audio API
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const melody = [
-        { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
-        { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 1.0 },
-        { freq: 659.25, duration: 1.0 }, { freq: 587.33, duration: 2.0 },
-        { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
-        { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 1.0 },
-        { freq: 783.99, duration: 1.0 }, { freq: 659.25, duration: 2.0 },
-        { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
-        { freq: 1046.50, duration: 1.0 }, { freq: 783.99, duration: 1.0 },
-        { freq: 659.25, duration: 1.0 }, { freq: 587.33, duration: 1.0 },
-        { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
-        { freq: 659.25, duration: 1.0 }, { freq: 659.25, duration: 1.0 },
-        { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 2.0 },
-      ];
-      
-      let noteIndex = 0;
-      isPlaying = true;
-      musicBtn.classList.add('playing');
-      
-      function playNote() {
-        if (!isPlaying) return;
-        const note = melody[noteIndex];
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
-        osc.frequency.value = note.freq;
-        osc.type = 'sine';
-        gain.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + note.duration * 0.9);
-        osc.start();
-        osc.stop(audioContext.currentTime + note.duration);
-        noteIndex = (noteIndex + 1) % melody.length;
-        setTimeout(playNote, note.duration * 1000);
+    function startMusic() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        
+        isPlaying = true;
+        musicBtn.classList.add('playing');
+        
+        // 开始播放旋律
+        scheduleNote();
+        
+      } catch(e) {
+        console.error('音乐播放失败:', e);
       }
-      
-      playNote();
     }
     
     function stopMusic() {
       isPlaying = false;
+      musicBtn.classList.remove('playing');
+      if (schedulerTimer) {
+        clearTimeout(schedulerTimer);
+        schedulerTimer = null;
+      }
+    }
+    
+    function toggleMusic() {
+      if (isPlaying) {
+        stopMusic();
+      } else {
+        startMusic();
+      }
+    }
       musicBtn.classList.remove('playing');
       if (audio) {
         audio.pause();
