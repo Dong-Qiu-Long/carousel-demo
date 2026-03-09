@@ -32,7 +32,6 @@
     
     .carousel-track {
       display: flex;
-      transition: transform 0.5s ease-in-out;
     }
     
     .carousel-slide {
@@ -45,26 +44,30 @@
     }
     
     .carousel-slide:nth-child(1) {
-      background: linear-gradient(45deg, #ff6b6b, #feca57);
-    }
-    
-    .carousel-slide:nth-child(2) {
-      background: linear-gradient(45deg, #48dbfb, #1dd1a1);
-    }
-    
-    .carousel-slide:nth-child(3) {
-      background: linear-gradient(45deg, #a55eea, #26de81);
-    }
-    
-    .carousel-slide:nth-child(4) {
-      background: linear-gradient(45deg, #fd79a8, #fdcb6e);
-    }
-    
-    .carousel-slide:nth-child(5) {
       background: linear-gradient(45deg, #74b9ff, #0984e3);
     }
     
+    .carousel-slide:nth-child(2) {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+    }
+    
+    .carousel-slide:nth-child(3) {
+      background: linear-gradient(45deg, #48dbfb, #1dd1a1);
+    }
+    
+    .carousel-slide:nth-child(4) {
+      background: linear-gradient(45deg, #a55eea, #26de81);
+    }
+    
+    .carousel-slide:nth-child(5) {
+      background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+    }
+    
     .carousel-slide:nth-child(6) {
+      background: linear-gradient(45deg, #74b9ff, #0984e3);
+    }
+    
+    .carousel-slide:nth-child(7) {
       background: linear-gradient(45deg, #ff6b6b, #feca57);
     }
     
@@ -145,6 +148,14 @@
 <body>
   <div class="carousel">
     <div class="carousel-track">
+      <!-- 最后一个幻灯片的克隆 (用于无缝过渡到第一张) -->
+      <div class="carousel-slide">
+        <div class="slide-content">
+          <h2>🎉 第五张</h2>
+          <p>无缝循环超丝滑</p>
+        </div>
+      </div>
+      <!-- 真正的第一张到第五张 -->
       <div class="carousel-slide">
         <div class="slide-content">
           <h2>🌈 第一张</h2>
@@ -175,6 +186,13 @@
           <p>无缝循环超丝滑</p>
         </div>
       </div>
+      <!-- 第一个幻灯片的克隆 (用于无缝过渡到最后一张) -->
+      <div class="carousel-slide">
+        <div class="slide-content">
+          <h2>🌈 第一张</h2>
+          <p>欢迎来到轮播图世界</p>
+        </div>
+      </div>
     </div>
     
     <button class="carousel-btn prev-btn">❮</button>
@@ -196,9 +214,15 @@
     const prevBtn = document.querySelector('.prev-btn');
     const nextBtn = document.querySelector('.next-btn');
     
-    let currentIndex = 0;
+    // 真实的幻灯片数量是5张
     const totalSlides = 5;
+    // track 中有7个元素：克隆1 + 真实5 + 克隆2
+    // 初始位置在第1个真实幻灯片（索引1）
+    let currentIndex = 1;
     let isTransitioning = false;
+    
+    // 初始化位置
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
     
     function updateCarousel(index, withTransition = true) {
       if (!withTransition) {
@@ -209,8 +233,10 @@
       
       track.style.transform = `translateX(-${index * 100}%)`;
       
+      // 更新圆点 (映射到真实幻灯片索引 0-4)
+      const realIndex = (index - 1 + totalSlides) % totalSlides;
       dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === index);
+        dot.classList.toggle('active', i === realIndex);
       });
     }
     
@@ -221,10 +247,10 @@
       currentIndex++;
       updateCarousel(currentIndex);
       
-      // 当无缝滚动到最后一张（第一张的克隆）时
       track.addEventListener('transitionend', function handler() {
-        if (currentIndex >= totalSlides) {
-          currentIndex = 0;
+        // 如果已经到了最后一个克隆幻灯片（索引6），瞬间切换到第一个真实幻灯片（索引1）
+        if (currentIndex >= slides.length - 1) {
+          currentIndex = 1;
           updateCarousel(currentIndex, false);
         }
         isTransitioning = false;
@@ -240,8 +266,9 @@
       updateCarousel(currentIndex);
       
       track.addEventListener('transitionend', function handler() {
-        if (currentIndex < 0) {
-          currentIndex = totalSlides - 1;
+        // 如果已经到了第一个克隆幻灯片（索引0），瞬间切换到最后一个真实幻灯片（索引5）
+        if (currentIndex <= 0) {
+          currentIndex = slides.length - 2;
           updateCarousel(currentIndex, false);
         }
         isTransitioning = false;
@@ -255,7 +282,8 @@
     dots.forEach((dot, index) => {
       dot.addEventListener('click', () => {
         if (isTransitioning) return;
-        currentIndex = index;
+        // 点击圆点跳转到对应的真实幻灯片（索引 + 1）
+        currentIndex = index + 1;
         updateCarousel(currentIndex);
       });
     });
