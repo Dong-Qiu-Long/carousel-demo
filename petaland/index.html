@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PETALAND | 宠物 paradise</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/3.0.23/tailwind.min.js"></script>
+  <link href="https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #c9a86c;
+      --primary-light: #e8d5b5;
+      --bg-dark: #0a0a0a;
+      --bg-card: #141414;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255,255,255,0.6);
+    }
+    
+    body {
+      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 动态光斑 */
+    .light-spot {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(150px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .light-spot-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(201,168,108,0.15) 0%, transparent 70%);
+      top: -200px;
+      right: -150px;
+      animation: float1 20s ease-in-out infinite;
+    }
+    
+    .light-spot-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(201,168,108,0.1) 0%, transparent 70%);
+      bottom: -150px;
+      left: -150px;
+      animation: float2 25s ease-in-out infinite;
+    }
+    
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-50px, 30px) scale(1.1); }
+    }
+    
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(30px, -40px); }
+    }
+    
+    /* 导航 */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.15em;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.3s;
+      letter-spacing: 0.05em;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+    }
+    
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 1.5rem 3rem;
+      position: relative;
+    }
+    
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      background: rgba(201,168,108,0.1);
+      border: 1px solid rgba(201,168,108,0.3);
+      border-radius: 50px;
+      font-size: 0.75rem;
+      color: var(--primary);
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 10vw, 4.5rem);
+      font-weight: 600;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.8s ease-out 0.1s both;
+    }
+    
+    .hero h1 span {
+      display: block;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 50%, #f0e6d2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 400px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      animation: fadeInUp 0.8s ease-out 0.3s both;
+    }
+    
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, #b8956a 100%);
+      color: #000;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(201,168,108,0.3);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* 宠物展示区 */
+    .pets-section {
+      padding: 5rem 1.5rem;
+      position: relative;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .pets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .pet-card {
+      aspect-ratio: 3/4;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.4s ease;
+    }
+    
+    .pet-card:hover {
+      transform: scale(0.98);
+    }
+    
+    .pet-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .pet-card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .pet-card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    }
+    
+    .pet-card h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    
+    .pet-card p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    
+    /* 服务区 */
+    .services-section {
+      padding: 5rem 1.5rem;
+      background: var(--bg-card);
+    }
+    
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .service-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .service-card:hover {
+      background: rgba(201,168,108,0.05);
+      border-color: rgba(201,168,108,0.2);
+    }
+    
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .service-card h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    .service-card p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    /* 关于我们 */
+    .about-section {
+      padding: 5rem 1.5rem;
+      text-align: center;
+    }
+    
+    .about-content {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .about-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+    
+    .about-content p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+    }
+    
+    .stat-item h4 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .stat-item p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    
+    /* 联系 */
+    .contact-section {
+      padding: 5rem 1.5rem;
+      background: var(--bg-card);
+      text-align: center;
+    }
+    
+    .contact-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    
+    .contact-content p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+    
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2.5rem;
+      background: var(--primary);
+      color: #000;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+    
+    .contact-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(201,168,108,0.3);
+    }
+    
+    /* Footer */
+    footer {
+      padding: 3rem 1.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+    
+    .copyright {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+    
+    /* 移动端优化 */
+    @media (max-width: 480px) {
+      .navbar {
+        padding: 1rem 1.25rem;
+      }
+      
+      .logo {
+        font-size: 1.25rem;
+      }
+      
+      .hero {
+        padding: 5rem 1.25rem 2rem;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero p {
+        font-size: 0.9rem;
+      }
+      
+      .hero-cta {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+      
+      .pets-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+      
+      .pet-card {
+        aspect-ratio: 4/3;
+      }
+      
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats {
+        gap: 2rem;
+      }
+      
+      .stat-item h4 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 动态光斑 -->
+  <div class="light-spot light-spot-1"></div>
+  <div class="light-spot light-spot-2"></div>
+  
+  <!-- 导航 -->
+  <nav class="navbar">
+    <div class="logo">PETALAND</div>
+    <div class="nav-links">
+      <a href="#home" class="active">首页</a>
+      <a href="#pets">宠物</a>
+      <a href="#services">服务</a>
+      <a href="#contact">联系</a>
+    </div>
+  </nav>
+  
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <span class="hero-badge">ELITE PET CARE</span>
+    <h1>尊享<span>宠物生活</span></h1>
+    <p>为您的爱宠提供全方位的精致护理服务，让每一次陪伴都成为美好回忆</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">立即预约</a>
+      <a href="#pets" class="btn btn-outline">探索更多</a>
+    </div>
+  </section>
+  
+  <!-- 宠物展示 -->
+  <section class="pets-section" id="pets">
+    <div class="section-header">
+      <h2>我们的伙伴</h2>
+      <p>精选优质宠物，陪伴您的美好生活</p>
+    </div>
+    <div class="pets-grid">
+      <div class="pet-card">
+        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=500&fit=crop" alt="金毛">
+        <div class="pet-card-overlay">
+          <h3>Max</h3>
+          <p>金毛寻回犬 · 2岁</p>
+        </div>
+      </div>
+      <div class="pet-card">
+        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=500&fit=crop" alt="英短">
+        <div class="pet-card-overlay">
+          <h3>Luna</h3>
+          <p>英国短毛猫 · 1岁</p>
+        </div>
+      </div>
+      <div class="pet-card">
+        <img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=400&h=500&fit=crop" alt="柯基">
+        <div class="pet-card-overlay">
+          <h3>Biscuit</h3>
+          <p>威尔士柯基 · 3岁</p>
+        </div>
+      </div>
+      <div class="pet-card">
+        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400&h=500&fit=crop" alt="布偶">
+        <div class="pet-card-overlay">
+          <h3>Snow</h3>
+          <p>布偶猫 · 2岁</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 服务 -->
+  <section class="services-section" id="services">
+    <div class="section-header">
+      <h2>尊享服务</h2>
+      <p>专业团队，为爱宠提供五星级的贴心照料</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🛁</div>
+        <h3>精品洗护</h3>
+        <p>高端宠物SPA，天然温和洗护产品</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">✂️</div>
+        <h3>造型设计</h3>
+        <p>专业美容师，时尚造型定制</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏥</div>
+        <h3>健康护理</h3>
+        <p>专业兽医团队，全面健康保障</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎓</div>
+        <h3>行为训练</h3>
+        <p>科学方法，培养良好习惯</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 关于我们 -->
+  <section class="about-section">
+    <div class="about-content">
+      <h2>关于 PETALAND</h2>
+      <p>我们相信，每一位宠物主人都值得拥有最优质的宠物服务体验。作为行业领先的宠物护理品牌，我们致力于为每一位毛孩子提供温暖、专业、贴心的服务。</p>
+      <div class="stats">
+        <div class="stat-item">
+          <h4>5000+</h4>
+          <p>服务家庭</p>
+        </div>
+        <div class="stat-item">
+          <h4>98%</h4>
+          <p>满意度</p>
+        </div>
+        <div class="stat-item">
+          <h4>50+</h4>
+          <p>专业团队</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 联系 -->
+  <section class="contact-section" id="contact">
+    <div class="contact-content">
+      <h2>开启尊享之旅</h2>
+      <p>立即预约，让您的爱宠体验前所未有的精致生活</p>
+      <a href="tel:400-888-8888" class="contact-btn">
+        <span>📞</span>
+        立即预约
+      </a>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">PETALAND</div>
+    <div class="footer-links">
+      <a href="#home">首页</a>
+      <a href="#pets">宠物</a>
+      <a href="#services">服务</a>
+      <a href="#contact">联系</a>
+    </div>
+    <p class="copyright">© 2026 PETALAND. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+    
+    // 导航高亮
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (scrollY >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
