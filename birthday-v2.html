@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>生日快乐</title>
+  <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/3.0.23/tailwind.min.js"></script>
+  <link href="https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0a0a;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* 动态光斑 */
+    .light-spot {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .light-spot-1 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, #ff6b6b, #ffa500);
+      top: -150px;
+      right: -100px;
+      opacity: 0.4;
+      animation: float1 15s ease-in-out infinite;
+    }
+    
+    .light-spot-2 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, #ffd700, #ff6b6b);
+      bottom: -100px;
+      left: -100px;
+      opacity: 0.35;
+      animation: float2 20s ease-in-out infinite;
+    }
+    
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-30px, 40px) scale(1.1); }
+      66% { transform: translate(20px, 20px) scale(0.95); }
+    }
+    
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(40px, -30px); }
+    }
+    
+    .main-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    /* 蛋糕容器 */
+    .cake-wrapper {
+      position: relative;
+      width: 200px;
+      height: 280px;
+      margin-bottom: 2.5rem;
+      animation: cake-float 3s ease-in-out infinite;
+    }
+    
+    @keyframes cake-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .cake {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .cake-base {
+      width: 180px;
+      height: 90px;
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 12px 12px 40px 40px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(255, 107, 107, 0.2);
+    }
+    
+    .cake-base::before {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      height: 18px;
+      background: repeating-linear-gradient(
+        90deg,
+        #ff6b6b 0px,
+        #ff6b6b 16px,
+        #ffd700 16px,
+        #ffd700 32px
+      );
+      border-radius: 6px;
+    }
+    
+    .cake-layer {
+      position: absolute;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 60px;
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .cake-layer::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      height: 14px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 6px;
+    }
+    
+    .cake-top {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 50px;
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 50% 50% 12px 12px;
+    }
+    
+    /* 蜡烛 */
+    .candle {
+      position: absolute;
+      bottom: 170px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 50px;
+      background: linear-gradient(90deg, #fff 0%, #e0e0e0 50%, #c0c0c0 100%);
+      border-radius: 4px;
+    }
+    
+    .flame {
+      position: absolute;
+      bottom: 215px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 30px;
+      background: linear-gradient(180deg, #fff, #ffd700, #ff6b6b);
+      border-radius: 50% 50% 20% 20%;
+      animation: flicker 0.2s ease-in-out infinite alternate;
+      box-shadow: 
+        0 0 20px #ffd700,
+        0 0 40px #ff6b6b,
+        0 0 60px rgba(255, 107, 107, 0.5);
+    }
+    
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+      100% { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+    }
+    
+    /* 文字 */
+    .text-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .title {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, #ffd700 50%, #ff6b6b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.1em;
+      animation: title-glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes title-glow {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3)); }
+      50% { filter: drop-shadow(0 0 30px rgba(255, 107, 107, 0.5)); }
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      letter-spacing: 0.2em;
+    }
+    
+    /* 祝福卡片 */
+    .wishes-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 2rem;
+      max-width: 340px;
+      backdrop-filter: blur(20px);
+    }
+    
+    .wishes-card p {
+      color: rgba(255,255,255,0.9);
+      font-size: 1rem;
+      line-height: 2.2;
+      text-align: center;
+      font-weight: 400;
+    }
+    
+    .wishes-card p span {
+      font-size: 1.3rem;
+      margin: 0 0.3rem;
+    }
+    
+    /* 音乐按钮 */
+    .music-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+      z-index: 100;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .music-btn:hover {
+      background: rgba(255,255,255,0.15);
+      transform: scale(1.05);
+    }
+    
+    .music-btn.playing {
+      animation: spin 3s linear infinite;
+      background: rgba(255, 107, 107, 0.2);
+      border-color: rgba(255, 107, 107, 0.4);
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* 开场遮罩 */
+    .start-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 10, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+    }
+    
+    .start-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .start-overlay h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, #ffd700, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tap-hint {
+      color: rgba(255,255,255,0.6);
+      font-size: 1.1rem;
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    /* 气球 */
+    .balloons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 40px;
+      height: 55px;
+      border-radius: 50%;
+      animation: balloon-float 12s ease-in-out infinite;
+      opacity: 0.6;
+    }
+    
+    @keyframes balloon-float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      5% { opacity: 0.6; }
+      95% { opacity: 0.6; }
+      100% { transform: translateY(-120vh) rotate(15deg); opacity: 0; }
+    }
+    
+    /* 响应式 */
+    @media (max-width: 480px) {
+      .title { font-size: 2.2rem; }
+      .subtitle { font-size: 0.9rem; }
+      .cake-wrapper { transform: scale(0.8); margin-bottom: 1.5rem; }
+      .wishes-card { padding: 1.5rem; }
+      .wishes-card p { font-size: 0.9rem; }
+      .music-btn { width: 48px; height: 48px; font-size: 1.2rem; bottom: 1.5rem; right: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 动态光斑 -->
+  <div class="light-spot light-spot-1"></div>
+  <div class="light-spot light-spot-2"></div>
+  
+  <!-- 气球 -->
+  <div class="balloons" id="balloons"></div>
+  
+  <!-- 开场遮罩 -->
+  <div class="start-overlay" id="startOverlay">
+    <h2>🎂 生日快乐 🎂</h2>
+    <p class="tap-hint">👆 点击开启惊喜</p>
+  </div>
+  
+  <!-- 主内容 -->
+  <div class="main-container">
+    <div class="cake-wrapper">
+      <div class="flame"></div>
+      <div class="candle"></div>
+      <div class="cake">
+        <div class="cake-top"></div>
+        <div class="cake-layer"></div>
+        <div class="cake-base"></div>
+      </div>
+    </div>
+    
+    <div class="text-section">
+      <h1 class="title">生日快乐</h1>
+      <p class="subtitle">HAPPY BIRTHDAY</p>
+    </div>
+    
+    <div class="wishes-card">
+      <p>
+        <span>🎵</span> 祝你生日快乐 <span>🎵</span><br>
+        <span>🎉</span> 愿你心想事成 <span>🎉</span><br>
+        <span>⭐</span> 永远幸福健康 <span>⭐</span>
+      </p>
+    </div>
+  </div>
+  
+  <button class="music-btn" id="musicBtn">🎵</button>
+
+  <script>
+    // 生成气球
+    const balloonsContainer = document.getElementById('balloons');
+    const colors = ['#ff6b6b', '#ffa500', '#48dbfb', '#1dd1a1', '#a55eea', '#fd79a8', '#ffd700'];
+    const emojis = ['🎈', '�Balloon', '❤️', '⭐', '🎉', '✨'];
+    
+    for (let i = 0; i < 12; i++) {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = Math.random() * 90 + 5 + '%';
+      balloon.style.animationDelay = Math.random() * 10 + 's';
+      balloon.style.animationDuration = (10 + Math.random() * 6) + 's';
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      balloon.style.background = `radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.9), ${color})`;
+      balloon.style.boxShadow = `inset -3px -3px 10px ${color}66`;
+      balloonsContainer.appendChild(balloon);
+    }
+    
+    // 音乐控制
+    const musicBtn = document.getElementById('musicBtn');
+    const startOverlay = document.getElementById('startOverlay');
+    let isPlaying = false;
+    let audioCtx = null;
+    let schedulerTimer = null;
+    
+    // 生日快乐歌旋律
+    const melody = [
+      { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
+      { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 1.0 },
+      { freq: 659.25, duration: 1.0 }, { freq: 587.33, duration: 2.0 },
+      { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
+      { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 1.0 },
+      { freq: 783.99, duration: 1.0 }, { freq: 659.25, duration: 2.0 },
+      { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
+      { freq: 1046.50, duration: 1.0 }, { freq: 783.99, duration: 1.0 },
+      { freq: 659.25, duration: 1.0 }, { freq: 587.33, duration: 1.0 },
+      { freq: 523.25, duration: 0.5 }, { freq: 523.25, duration: 0.5 },
+      { freq: 659.25, duration: 1.0 }, { freq: 659.25, duration: 1.0 },
+      { freq: 587.33, duration: 1.0 }, { freq: 523.25, duration: 2.0 },
+    ];
+    
+    let noteIndex = 0;
+    
+    function scheduleNote() {
+      if (!isPlaying || !audioCtx) return;
+      
+      const note = melody[noteIndex];
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      osc.frequency.value = note.freq;
+      osc.type = 'sine';
+      
+      const now = audioCtx.currentTime;
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + note.duration * 0.9);
+      
+      osc.start(now);
+      osc.stop(now + note.duration);
+      
+      noteIndex = (noteIndex + 1) % melody.length;
+      schedulerTimer = setTimeout(scheduleNote, melody[noteIndex].duration * 1000);
+    }
+    
+    function startMusic() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        
+        isPlaying = true;
+        musicBtn.classList.add('playing');
+        scheduleNote();
+      } catch(e) {
+        console.error('音乐播放失败:', e);
+      }
+    }
+    
+    function stopMusic() {
+      isPlaying = false;
+      musicBtn.classList.remove('playing');
+      if (schedulerTimer) {
+        clearTimeout(schedulerTimer);
+        schedulerTimer = null;
+      }
+    }
+    
+    musicBtn.addEventListener('click', () => {
+      if (isPlaying) stopMusic();
+      else startMusic();
+    });
+    
+    startOverlay.addEventListener('click', () => {
+      startOverlay.classList.add('hidden');
+      startMusic();
+    });
+  </script>
+</body>
+</html>
