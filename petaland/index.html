@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PETALAND | 宠物 paradise</title>
+  <title>ICON MALE | 男模经纪公司</title>
   <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/3.0.23/tailwind.min.js"></script>
   <link href="https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -210,8 +210,8 @@
       }
     }
     
-    /* 宠物展示区 */
-    .pets-section {
+    /* 男模展示区 */
+    .models-section {
       padding: 5rem 1.5rem;
       position: relative;
     }
@@ -233,7 +233,7 @@
       font-size: 0.9rem;
     }
     
-    .pets-grid {
+    .models-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
@@ -241,7 +241,7 @@
       margin: 0 auto;
     }
     
-    .pet-card {
+    .model-card {
       aspect-ratio: 3/4;
       border-radius: 20px;
       overflow: hidden;
@@ -250,39 +250,50 @@
       transition: transform 0.4s ease;
     }
     
-    .pet-card:hover {
+    .model-card:hover {
       transform: scale(0.98);
     }
     
-    .pet-card img {
+    .model-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.5s ease;
     }
     
-    .pet-card:hover img {
+    .model-card:hover img {
       transform: scale(1.05);
     }
     
-    .pet-card-overlay {
-      position: absolute;
-      bottom: 0;
+    .model-card-overlay {
+;
+      bottom:      position: absolute 0;
       left: 0;
       right: 0;
       padding: 1.5rem;
       background: linear-gradient(transparent, rgba(0,0,0,0.8));
     }
     
-    .pet-card h3 {
+    .model-card h3 {
       font-size: 1.1rem;
       font-weight: 500;
       margin-bottom: 0.25rem;
     }
     
-    .pet-card p {
+    .model-card p {
       font-size: 0.75rem;
       color: var(--text-secondary);
+    }
+    
+    .model-tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: var(--primary);
+      color: #000;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
     }
     
     /* 服务区 */
@@ -484,12 +495,12 @@
         text-align: center;
       }
       
-      .pets-grid {
+      .models-grid {
         grid-template-columns: 1fr;
         gap: 1.25rem;
       }
       
-      .pet-card {
+      .model-card {
         aspect-ratio: 4/3;
       }
       
@@ -514,10 +525,10 @@
   
   <!-- 导航 -->
   <nav class="navbar">
-    <div class="logo">PETALAND</div>
+    <div class="logo">ICON MALE</div>
     <div class="nav-links">
       <a href="#home" class="active">首页</a>
-      <a href="#pets">宠物</a>
+      <a href="#models">男模</a>
       <a href="#services">服务</a>
       <a href="#contact">联系</a>
     </div>
@@ -525,48 +536,52 @@
   
   <!-- Hero -->
   <section class="hero" id="home">
-    <span class="hero-badge">ELITE PET CARE</span>
-    <h1>尊享<span>宠物生活</span></h1>
-    <p>为您的爱宠提供全方位的精致护理服务，让每一次陪伴都成为美好回忆</p>
+    <span class="hero-badge">PREMIER MODEL AGENCY</span>
+    <h1>定义<span>绅士品格</span></h1>
+    <p>汇聚行业顶尖男模，为品牌提供专业模特经纪服务，引领时尚潮流新高度</p>
     <div class="hero-cta">
-      <a href="#contact" class="btn btn-primary">立即预约</a>
-      <a href="#pets" class="btn btn-outline">探索更多</a>
+      <a href="#contact" class="btn btn-primary">立即咨询</a>
+      <a href="#models" class="btn btn-outline">浏览模特</a>
     </div>
   </section>
   
-  <!-- 宠物展示 -->
-  <section class="pets-section" id="pets">
+  <!-- 男模展示 -->
+  <section class="models-section" id="models">
     <div class="section-header">
-      <h2>我们的伙伴</h2>
-      <p>精选优质宠物，陪伴您的美好生活</p>
+      <h2>顶级男模</h2>
+      <p>汇聚业界精英，引领时尚风潮</p>
     </div>
-    <div class="pets-grid">
-      <div class="pet-card">
-        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=500&fit=crop" alt="金毛">
-        <div class="pet-card-overlay">
-          <h3>Max</h3>
-          <p>金毛寻回犬 · 2岁</p>
+    <div class="models-grid">
+      <div class="model-card">
+        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop" alt="男模">
+        <div class="model-card-overlay">
+          <span class="model-tag">T台</span>
+          <h3>Alex Chen</h3>
+          <p>身高 188cm · 年龄 24</p>
         </div>
       </div>
-      <div class="pet-card">
-        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=500&fit=crop" alt="英短">
-        <div class="pet-card-overlay">
-          <h3>Luna</h3>
-          <p>英国短毛猫 · 1岁</p>
+      <div class="model-card">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop" alt="男模">
+        <div class="model-card-overlay">
+          <span class="model-tag">平面</span>
+          <h3>James Liu</h3>
+          <p>身高 185cm · 年龄 22</p>
         </div>
       </div>
-      <div class="pet-card">
-        <img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=400&h=500&fit=crop" alt="柯基">
-        <div class="pet-card-overlay">
-          <h3>Biscuit</h3>
-          <p>威尔士柯基 · 3岁</p>
+      <div class="model-card">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=500&fit=crop" alt="男模">
+        <div class="model-card-overlay">
+          <span class="model-tag">广告</span>
+          <h3>Michael Wu</h3>
+          <p>身高 190cm · 年龄 26</p>
         </div>
       </div>
-      <div class="pet-card">
-        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400&h=500&fit=crop" alt="布偶">
-        <div class="pet-card-overlay">
-          <h3>Snow</h3>
-          <p>布偶猫 · 2岁</p>
+      <div class="model-card">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=500&fit=crop" alt="男模">
+        <div class="model-card-overlay">
+          <span class="model-tag">T台</span>
+          <h3>Daniel Zhang</h3>
+          <p>身高 187cm · 年龄 23</p>
         </div>
       </div>
     </div>
@@ -575,29 +590,29 @@
   <!-- 服务 -->
   <section class="services-section" id="services">
     <div class="section-header">
-      <h2>尊享服务</h2>
-      <p>专业团队，为爱宠提供五星级的贴心照料</p>
+      <h2>专业服务</h2>
+      <p>一站式模特经纪服务，满足多元需求</p>
     </div>
     <div class="services-grid">
       <div class="service-card">
-        <div class="service-icon">🛁</div>
-        <h3>精品洗护</h3>
-        <p>高端宠物SPA，天然温和洗护产品</p>
+        <div class="service-icon">📸</div>
+        <h3>平面拍摄</h3>
+        <p>高端品牌广告、杂志封面、商业宣传</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">✂️</div>
-        <h3>造型设计</h3>
-        <p>专业美容师，时尚造型定制</p>
+        <div class="service-icon">🏃</div>
+        <h3>T台走秀</h3>
+        <p>时装周发布、品牌发布会、秀场演出</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🏥</div>
-        <h3>健康护理</h3>
-        <p>专业兽医团队，全面健康保障</p>
+        <div class="service-icon">🎬</div>
+        <h3>影视通告</h3>
+        <p>广告片、MV、品牌短片演出</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🎓</div>
-        <h3>行为训练</h3>
-        <p>科学方法，培养良好习惯</p>
+        <div class="service-icon">🤝</div>
+        <h3>商务活动</h3>
+        <p>品牌代言、开业典礼、展览活动</p>
       </div>
     </div>
   </section>
@@ -605,20 +620,20 @@
   <!-- 关于我们 -->
   <section class="about-section">
     <div class="about-content">
-      <h2>关于 PETALAND</h2>
-      <p>我们相信，每一位宠物主人都值得拥有最优质的宠物服务体验。作为行业领先的宠物护理品牌，我们致力于为每一位毛孩子提供温暖、专业、贴心的服务。</p>
+      <h2>关于 ICON MALE</h2>
+      <p>作为业界领先的男模经纪公司，我们致力于发掘和培养优质模特人才，为客户提供专业、高效的模特服务。与众多国际知名品牌建立长期合作关系。</p>
       <div class="stats">
         <div class="stat-item">
-          <h4>5000+</h4>
-          <p>服务家庭</p>
+          <h4>200+</h4>
+          <p>签约模特</p>
+        </div>
+        <div class="stat-item">
+          <h4>500+</h4>
+          <p>合作客户</p>
         </div>
         <div class="stat-item">
           <h4>98%</h4>
           <p>满意度</p>
-        </div>
-        <div class="stat-item">
-          <h4>50+</h4>
-          <p>专业团队</p>
         </div>
       </div>
     </div>
@@ -627,25 +642,25 @@
   <!-- 联系 -->
   <section class="contact-section" id="contact">
     <div class="contact-content">
-      <h2>开启尊享之旅</h2>
-      <p>立即预约，让您的爱宠体验前所未有的精致生活</p>
+      <h2>开启合作之旅</h2>
+      <p>立即联系我们，为您的品牌选择最合适的模特</p>
       <a href="tel:400-888-8888" class="contact-btn">
         <span>📞</span>
-        立即预约
+        立即咨询
       </a>
     </div>
   </section>
   
   <!-- Footer -->
   <footer>
-    <div class="footer-logo">PETALAND</div>
+    <div class="footer-logo">ICON MALE</div>
     <div class="footer-links">
       <a href="#home">首页</a>
-      <a href="#pets">宠物</a>
+      <a href="#models">男模</a>
       <a href="#services">服务</a>
       <a href="#contact">联系</a>
     </div>
-    <p class="copyright">© 2026 PETALAND. All rights reserved.</p>
+    <p class="copyright">© 2026 ICON MALE. All rights reserved.</p>
   </footer>
 
   <script>
